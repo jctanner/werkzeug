@@ -865,6 +865,8 @@ class LimitedStream(io.IOBase):
         self._pos = 0
         self.limit = limit
 
+        self._raw_data = None
+
     def __iter__(self) -> "LimitedStream":
         return self
 
@@ -924,6 +926,7 @@ class LimitedStream(io.IOBase):
         if to_read and len(read) != to_read:
             return self.on_disconnect()
         self._pos += len(read)
+        self._raw_data = read
         return read
 
     def readline(self, size: t.Optional[int] = None) -> bytes:
